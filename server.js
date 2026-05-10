@@ -18,6 +18,8 @@ app.get("/", (req, res) => {
 app.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
 
+  console.log("Tentativa de cadastro:", email);
+
   if (!name || !email || !password) {
     return res.status(400).json({
       message: "Nome, e-mail e senha são obrigatórios.",
@@ -27,6 +29,8 @@ app.post("/register", async (req, res) => {
   const userExists = users.find((u) => u.email === email);
 
   if (userExists) {
+    console.log("Cadastro recusado, usuário já existe:", email);
+
     return res.status(400).json({
       message: "Usuário já existe.",
     });
@@ -43,6 +47,8 @@ app.post("/register", async (req, res) => {
 
   users.push(newUser);
 
+  console.log("Usuário cadastrado:", email);
+
   res.status(201).json({
     message: "Usuário criado com sucesso!",
     user: {
@@ -56,6 +62,8 @@ app.post("/register", async (req, res) => {
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
+  console.log("Tentativa de login:", email);
+
   if (!email || !password) {
     return res.status(400).json({
       message: "E-mail e senha são obrigatórios.",
@@ -65,6 +73,8 @@ app.post("/login", async (req, res) => {
   const user = users.find((u) => u.email === email);
 
   if (!user) {
+    console.log("Login recusado, usuário não encontrado:", email);
+
     return res.status(400).json({
       message: "Usuário não encontrado.",
     });
@@ -73,10 +83,14 @@ app.post("/login", async (req, res) => {
   const senhaCorreta = await bcrypt.compare(password, user.password);
 
   if (!senhaCorreta) {
+    console.log("Login recusado, senha inválida:", email);
+
     return res.status(400).json({
       message: "Senha inválida.",
     });
   }
+
+  console.log("Login realizado:", email);
 
   res.json({
     message: "Login realizado com sucesso!",
@@ -95,6 +109,8 @@ app.get("/pets", (req, res) => {
 app.post("/pets", (req, res) => {
   const { nome, especie, raca, idade } = req.body;
 
+  console.log("Tentativa de cadastro de pet:", nome);
+
   if (!nome || !especie) {
     return res.status(400).json({
       message: "Nome e espécie do pet são obrigatórios.",
@@ -111,6 +127,8 @@ app.post("/pets", (req, res) => {
 
   pets.push(pet);
 
+  console.log("Pet cadastrado:", nome);
+
   res.status(201).json({
     message: "Pet cadastrado com sucesso!",
     pet,
@@ -123,6 +141,8 @@ app.get("/agendamentos", (req, res) => {
 
 app.post("/agendamentos", (req, res) => {
   const { nomePet, data, servico } = req.body;
+
+  console.log("Tentativa de agendamento:", nomePet, data, servico);
 
   if (!nomePet || !data || !servico) {
     return res.status(400).json({
@@ -138,6 +158,8 @@ app.post("/agendamentos", (req, res) => {
   };
 
   agendamentos.push(agendamento);
+
+  console.log("Agendamento realizado:", nomePet, data, servico);
 
   res.status(201).json({
     message: "Agendamento realizado com sucesso!",
