@@ -140,13 +140,13 @@ app.get("/agendamentos", (req, res) => {
 });
 
 app.post("/agendamentos", (req, res) => {
-  const { nomePet, data, servico } = req.body;
+  const { nomePet, data, servico, userEmail } = req.body;
 
-  console.log("Tentativa de agendamento:", nomePet, data, servico);
+  console.log("Tentativa de agendamento:", nomePet, data, servico, userEmail);
 
-  if (!nomePet || !data || !servico) {
+  if (!nomePet || !data || !servico || !userEmail) {
     return res.status(400).json({
-      message: "Nome do pet, data e serviço são obrigatórios.",
+      message: "Nome do pet, data, serviço e usuário são obrigatórios.",
     });
   }
 
@@ -155,11 +155,12 @@ app.post("/agendamentos", (req, res) => {
     nomePet,
     data,
     servico,
+    userEmail,
   };
 
   agendamentos.push(agendamento);
 
-  console.log("Agendamento realizado:", nomePet, data, servico);
+  console.log("Agendamento realizado:", agendamento);
 
   res.status(201).json({
     message: "Agendamento realizado com sucesso!",
