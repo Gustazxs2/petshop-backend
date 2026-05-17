@@ -52,6 +52,10 @@ app.get("/", (req, res) => {
   res.send("API Petshop rodando 🐶");
 });
 
+app.get("/produtos", (req, res) => {
+  res.json(produtos);
+});
+
 app.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
 
